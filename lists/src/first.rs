@@ -73,6 +73,17 @@ impl List {
             }
         }
     }
+
+    pub fn count(&self) -> u32 {
+        Self::count_links(&self.head)
+    }
+
+    fn count_links(link: &Link) -> u32 {
+        match link {
+            Link::Empty => 0,
+            Link::More(node) => 1 + Self::count_links(&node.next),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -101,5 +112,20 @@ mod test {
 
         assert_eq!(list.pop(), Some(1));
         assert_eq!(list.pop(), None);
+    }
+
+    #[test]
+    fn counts() {
+        let mut list = List::new();
+        assert_eq!(list.count(), 0);
+        list.push(1);
+        assert_eq!(list.count(), 1);
+        list.push(2);
+        assert_eq!(list.count(), 2);
+        list.push(3);
+        assert_eq!(list.count(), 3);
+
+        list.pop();
+        assert_eq!(list.count(), 2);
     }
 }
