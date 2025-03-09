@@ -43,4 +43,34 @@ impl List {
         });
         self.head = Link::More(new_node);
     }
+
+    // V1:
+    // pub fn pop(&mut self) -> Option<i32> {
+    //     let result: Option<i32>;
+    //     // Note: `mem::replace` returns the original value.
+    //     let old_head = mem::replace(&mut self.head, Link::Empty);
+    //     match old_head {
+    //         Link::Empty => {
+    //             result = None;
+    //         }
+    //         Link::More(node) => {
+    //             result = Option::Some(node.elem);
+    //             self.head = node.next;
+    //         }
+    //     };
+    //     return result;
+    // }
+
+    // V2: Slightly more rusty.
+    pub fn pop(&mut self) -> Option<i32> {
+        // Note: `mem::replace` returns the original value.
+        let old_head = mem::replace(&mut self.head, Link::Empty);
+        match old_head {
+            Link::Empty => Option::None,
+            Link::More(node) => {
+                self.head = node.next;
+                Option::Some(node.elem)
+            }
+        }
+    }
 }
